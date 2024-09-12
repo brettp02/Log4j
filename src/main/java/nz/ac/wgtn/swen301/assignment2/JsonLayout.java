@@ -39,7 +39,7 @@ public class JsonLayout extends Layout {
      * Used for formatting time when using makeJsonObject(x) into daty-month-year format for the New Zealand timezone
      *
      * @param time
-     * @return
+     * @returns
      */
     public String formatTime(long time) {
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy'T'HH:mm:ss'Z'");
