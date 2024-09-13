@@ -44,7 +44,7 @@ public class JsonLayout extends Layout {
     }
 
     /**
-     * Used for formatting time when using makeJsonObject(x) into daty-month-year format for the New Zealand timezone
+     * Used for formatting time when using makeJsonObject(x) into daty-month-year format for the New Zealand timezone (Changed to UTC for tests)
      *
      * @param time
      * @returns
