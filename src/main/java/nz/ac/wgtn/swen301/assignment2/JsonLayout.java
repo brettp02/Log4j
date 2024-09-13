@@ -26,13 +26,19 @@ public class JsonLayout extends Layout {
     public JsonObject makeJsonObject(LoggingEvent loggingEvent) {
         JsonObject logDetails = new JsonObject();
 
+        // Safely handle null values for each field
+        String loggerName = loggingEvent.getLoggerName() != null ? loggingEvent.getLoggerName() : "null";
         String message = loggingEvent.getMessage() != null ? loggingEvent.getMessage().toString() : "null";
+        String threadName = loggingEvent.getThreadName() != null ? loggingEvent.getThreadName() : "null";
+        String level = loggingEvent.getLevel() != null ? loggingEvent.getLevel().toString() : "null";
+        String timestamp = formatTime(loggingEvent.getTimeStamp());
 
-        logDetails.addProperty("name", loggingEvent.getLoggerName());
+        // Add properties to the JSON object
+        logDetails.addProperty("name", loggerName);
         logDetails.addProperty("message", message);
-        logDetails.addProperty("thread", loggingEvent.getThreadName());
-        logDetails.addProperty("level", loggingEvent.getLevel().toString());
-        logDetails.addProperty("timestamp", formatTime(loggingEvent.getTimeStamp()));
+        logDetails.addProperty("thread", threadName);
+        logDetails.addProperty("level", level);
+        logDetails.addProperty("timestamp", timestamp);
 
         return logDetails;
     }
