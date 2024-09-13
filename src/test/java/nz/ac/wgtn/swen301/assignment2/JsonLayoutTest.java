@@ -38,7 +38,103 @@ class JsonLayoutTest {
         String formattedTimeStamp = jsonLayout.formatTime(testTimeStamp);
         assertEquals(formattedTimeStamp, jsonObject.get("timestamp").getAsString());
 
-        System.out.println(jsonObject.toString());
+        System.out.println("Test Format:\n"+jsonLayout.printJson(jsonObject) + "\n");
+    }
+
+    @Test
+    public void testMakeJsonObject() {
+        Logger logger = Logger.getLogger("TestLogger");
+        String testMessage = "Test log message for makeJsonObject";
+        String testThread = "TestThread";
+        long testTimeStamp = System.currentTimeMillis();
+        LoggingEvent loggingEvent = new LoggingEvent(
+                "TestLogger", logger, testTimeStamp, Level.DEBUG, testMessage, testThread, null, null, null, null);
+
+        JsonLayout jsonLayout = new JsonLayout();
+        JsonObject jsonObject = jsonLayout.makeJsonObject(loggingEvent);
+
+        assertEquals(testMessage, jsonObject.get("message").getAsString());
+        assertEquals("TestLogger", jsonObject.get("name").getAsString());
+        assertEquals(testThread, jsonObject.get("thread").getAsString());
+        assertEquals("DEBUG", jsonObject.get("level").getAsString());
+
+        String formattedTimeStamp = jsonLayout.formatTime(testTimeStamp);
+        assertEquals(formattedTimeStamp, jsonObject.get("timestamp").getAsString());
+
+        System.out.println("Test Make Json Object:\n" + jsonLayout.printJson(jsonObject) + "\n");
+    }
+
+
+    @Test
+    public void testErrorLevel() {
+        Logger logger = Logger.getLogger("TestLogger");
+        LoggingEvent loggingEvent = new LoggingEvent(
+                "TestLogger", logger, System.currentTimeMillis(), Level.ERROR, "Error message", "TestThread", null, null, null, null);
+        JsonLayout jsonLayout = new JsonLayout();
+        JsonObject jsonObject = JsonParser.parseString(jsonLayout.format(loggingEvent)).getAsJsonObject();
+        assertEquals("ERROR", jsonObject.get("level").getAsString());
+
+        System.out.println("Test Error Level:\n"+jsonLayout.printJson(jsonObject) + "\n");
+    }
+
+    @Test
+    public void testNullMessage() {
+        Logger logger = Logger.getLogger("TestLogger");
+        LoggingEvent loggingEvent = new LoggingEvent(
+                "TestLogger", logger, System.currentTimeMillis(), Level.INFO, null, "TestThread", null, null, null, null);
+        JsonLayout jsonLayout = new JsonLayout();
+        JsonObject jsonObject = JsonParser.parseString(jsonLayout.format(loggingEvent)).getAsJsonObject();
+        assertEquals("null", jsonObject.get("message").getAsString());
+
+        System.out.println("Test Null Message:\n" + jsonLayout.printJson(jsonObject) + "\n");
+    }
+
+    @Test
+    public void testPrintJson() {
+        JsonLayout jsonLayout = new JsonLayout();
+        Logger logger = Logger.getLogger("TestLogger");
+        LoggingEvent loggingEvent = new LoggingEvent(
+                "TestLogger", logger, System.currentTimeMillis(), Level.INFO, "Test message", "TestThread", null, null, null, null);
+        JsonObject jsonObject = jsonLayout.makeJsonObject(loggingEvent);
+        String prettyJson = jsonLayout.printJson(jsonObject);
+        assertNotNull(prettyJson);
+        assertTrue(prettyJson.contains("Test message"));
+
+        System.out.println("Test Pretty Print/printJson()\n" + prettyJson + "\n");
+    }
+
+    @Test
+    public void testFormatTime() {
+        JsonLayout jsonLayout = new JsonLayout();
+
+        // Test a specific timestamp
+        long testTimeStamp = 0L;
+        String formattedTimeStamp = jsonLayout.formatTime(testTimeStamp);
+        assertEquals("01-01-1970T00:00:00Z", formattedTimeStamp);
+    }
+
+    @Test
+    public void testEmptyThreadName() {
+        Logger logger = Logger.getLogger("TestLogger");
+        LoggingEvent loggingEvent = new LoggingEvent(
+                "TestLogger", logger, System.currentTimeMillis(), Level.INFO, "Test message", "", null, null, null, null);
+        JsonLayout jsonLayout = new JsonLayout();
+        JsonObject jsonObject = JsonParser.parseString(jsonLayout.format(loggingEvent)).getAsJsonObject();
+        assertEquals("", jsonObject.get("thread").getAsString());
+
+        System.out.println("Test Empty Thread Name:\n" + jsonLayout.printJson(jsonObject) + "\n");
+    }
+
+    @Test
+    public void testDebugLevel() {
+        Logger logger = Logger.getLogger("TestLogger");
+        LoggingEvent loggingEvent = new LoggingEvent(
+                "TestLogger", logger, System.currentTimeMillis(), Level.DEBUG, "Debug message", "TestThread", null, null, null, null);
+        JsonLayout jsonLayout = new JsonLayout();
+        JsonObject jsonObject = JsonParser.parseString(jsonLayout.format(loggingEvent)).getAsJsonObject();
+        assertEquals("DEBUG", jsonObject.get("level").getAsString());
+
+        System.out.println("Test Debug Level:\n" + jsonLayout.printJson(jsonObject) + "\n");
     }
 
 }

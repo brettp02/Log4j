@@ -26,8 +26,10 @@ public class JsonLayout extends Layout {
     public JsonObject makeJsonObject(LoggingEvent loggingEvent) {
         JsonObject logDetails = new JsonObject();
 
-        logDetails.addProperty("message", loggingEvent.getMessage().toString());
+        String message = loggingEvent.getMessage() != null ? loggingEvent.getMessage().toString() : "null";
+
         logDetails.addProperty("name", loggingEvent.getLoggerName());
+        logDetails.addProperty("message", message);
         logDetails.addProperty("thread", loggingEvent.getThreadName());
         logDetails.addProperty("level", loggingEvent.getLevel().toString());
         logDetails.addProperty("timestamp", formatTime(loggingEvent.getTimeStamp()));
@@ -43,7 +45,7 @@ public class JsonLayout extends Layout {
      */
     public String formatTime(long time) {
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy'T'HH:mm:ss'Z'");
-        sdf.setTimeZone(TimeZone.getTimeZone("Pacific/Auckland"));  // can change to UTC for universal time
+        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));  // Changed to UTC for tests can use Pacific/Auckland for NZT
         return sdf.format(new Date(time));
     }
 
