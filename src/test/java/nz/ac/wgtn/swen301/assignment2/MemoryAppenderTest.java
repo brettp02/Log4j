@@ -150,6 +150,59 @@ public class MemoryAppenderTest {
         assertEquals(Level.ERROR, logs.get(2).getLevel());
     }
 
+    @Test
+    public void testGetAndSetMaxSize() {
+        memoryAppender.setMaxSize(500);
+        assertEquals(500, memoryAppender.getMaxSize());
+    }
+
+    @Test
+    public void testAppendMaxSizeZero() {
+        memoryAppender.setMaxSize(1);
+
+        testLogger.info("First log");
+        testLogger.info("Second log");
+
+        List<LoggingEvent> logs = memoryAppender.getCurrentLogs();
+        assertEquals(1, logs.size());
+        assertEquals("Second log", logs.get(0).getMessage());
+        assertEquals(1, memoryAppender.getDiscardedLogCount());
+    }
+
+    @Test
+    public void testAppendLog() {
+        testLogger.info("Test");
+
+        List<LoggingEvent> logs = memoryAppender.getCurrentLogs();
+        assertEquals(1, logs.size());
+        assertEquals("Test", logs.get(0).getMessage());
+    }
+
+    @Test
+    public void testGetLogs() {
+        testLogger.warn("Test");
+        String[] logs = memoryAppender.getLogs();
+
+        assertEquals(1, logs.length);
+        assertTrue(logs[0].contains("Test"));
+    }
+
+    @Test
+    public void testGetLogCount() {
+        assertEquals(0, memoryAppender.getLogCount());
+
+        testLogger.log(Level.INFO, "Test message 1");
+        assertEquals(1, memoryAppender.getLogCount());
+
+        testLogger.log(Level.ERROR, "Test message 2");
+        assertEquals(2, memoryAppender.getLogCount());
+
+        testLogger.log(Level.DEBUG, "Test message 3");
+        testLogger.log(Level.WARN, "Test message 4");
+
+        assertEquals(4, memoryAppender.getLogCount());
+    }
+
 
     @Test
     public void testAppenderClose() {
