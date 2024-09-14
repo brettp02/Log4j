@@ -110,7 +110,7 @@ class JsonLayoutTest {
         // Test a specific timestamp
         long testTimeStamp = 0L;
         String formattedTimeStamp = jsonLayout.formatTime(testTimeStamp);
-        assertEquals("01-01-1970T00:00:00Z", formattedTimeStamp);
+        assertEquals("1970-01-01T00:00:00Z", formattedTimeStamp);
     }
 
     @Test

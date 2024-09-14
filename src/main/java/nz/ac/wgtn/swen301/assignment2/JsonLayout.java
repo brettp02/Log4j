@@ -50,7 +50,7 @@ public class JsonLayout extends Layout {
      * @returns
      */
     public String formatTime(long time) {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy'T'HH:mm:ss'Z'");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
         sdf.setTimeZone(TimeZone.getTimeZone("UTC"));  // Changed to UTC for tests can use Pacific/Auckland for NZT
         return sdf.format(new Date(time));
     }
