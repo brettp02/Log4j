@@ -4,12 +4,21 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import org.apache.log4j.AppenderSkeleton;
+import org.apache.log4j.PatternLayout;
 import org.apache.log4j.spi.LoggingEvent;
 
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
-public class MemoryAppender extends AppenderSkeleton {
+
+/**
+ *  MemoryAppender is a custom log4j appender that stores log events in memory rather than performing I/O operations.
+ *  It has a maxSize for storage and will remove the oldest loggingEvent once that is reached
+ *  Exports logs to a JSON file
+ *
+ * @studentid = 300635306
+ */
+public class MemoryAppender extends AppenderSkeleton implements MemoryAppenderMBean{
 
     // Declaring fields, all except name are initialized
     private String name;
@@ -61,6 +70,33 @@ public class MemoryAppender extends AppenderSkeleton {
      */
     public void setAppenderName(String name) {
         this.name = name;
+    }
+
+    // Implementing MBean methods
+
+    /**
+     * Returns the log events converted to strings using PatternLayout
+     *
+     * @return
+     */
+    @Override
+    public String[] getLogs() {
+        PatternLayout layout = new PatternLayout();
+        List<String> logStrings = new ArrayList<>();
+        for(LoggingEvent event : logEvents) {
+            logStrings.add(layout.format(event));
+        }
+        return logStrings.toArray(new String[0]);
+    }
+
+    /**
+     * Returns number of logs that are currently being stored
+     *
+     * @return
+     */
+    @Override
+    public long getLogCount() {
+        return this.logEvents.size();
     }
 
     /**
@@ -122,12 +158,8 @@ public class MemoryAppender extends AppenderSkeleton {
     }
 
     @Override
-    public void close() {
-
-    }
+    public void close() {}
 
     @Override
-    public boolean requiresLayout() {
-        return false;
-    }
+    public boolean requiresLayout() {return false;}
 }

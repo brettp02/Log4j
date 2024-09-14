@@ -10,7 +10,7 @@ import java.text.*;
 import com.google.gson.JsonObject;
 
 /**
- *  This class creates the layout in order to convert log events (i.e., instances of org.apache.log4j.spi.LoggingEvent)
+ *  JsonLayout is a class which creates the layout in order to convert log events (i.e., instances of org.apache.log4j.spi.LoggingEvent)
  *  to JSON strings. I.e., the strings produced are valid JSON objects
  *
  * @studentid = 300635306
