@@ -8,8 +8,23 @@ import org.apache.log4j.Logger;
 import java.io.IOException;
 import java.util.Random;
 
+/**
+ *  LogRunner is an executable class that runs for 2 minutes and produces one log event per second.
+ *  The log level and message of the event are randomized.
+ *  The main purpose of this class is to test MBean, which I verified is working with VisualVM
+ *
+ *  Press enter to exit after the loop has finished
+ *
+ * @studentid - 300635306
+ */
 public class LogRunner {
 
+    /**
+     * Main class, that runs for 2 minutes, producing one log per second.
+     * Uncomment the export line to see the events.
+     *
+     * @param args
+     */
     public static void main(String[] args) {
         // New Instance of MemoryAppender called "LogRunnerAPpender"
         MemoryAppender memoryAppender = new MemoryAppender();
@@ -57,7 +72,7 @@ public class LogRunner {
             }
         }
 
-        memoryAppender.export("logrunner_logs.json");
+        //memoryAppender.export("logrunner_logs.json"); UNCOMMENT THIS TO SEE THE RESULTING JSON FILE
 
         try {
             System.out.println("Logging completed press Enter to exit");
